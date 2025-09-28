@@ -1,16 +1,19 @@
 <?php
-    $dbHost = 'Localhost';
-    $udUsername = 'Nunes';
-    $udPassord = 'portugal';
-    $dbName = 'preenchimento-de-dados';
+    $dbHost = 'localhost';
+    $dbUsername = 'users';
+    $dbPassword = '********';
+    $dbName = 'formulario';
 
-    $conexao = new mysqli($dbHost,$udUsername,$udPassord,$dbNome);
-    if($conexao->connet_errno)
+    $conexao = new mysqli($dbHost,$dbUsername,$dbPassword,$dbName);
+
+    if($conexao->connect_errno)
     {
         echo "Erro";
     
     }
     else
     {
-        echo"C"
+        echo"Conexao efetutada com sucesso";
     }
+
+?>    
