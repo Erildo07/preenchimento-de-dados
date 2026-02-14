@@ -1,3 +1,40 @@
+<?php
+$mensagem = ""; // Variável para armazenar a mensagem
+
+if(isset($_POST['submit'])) {
+
+    include_once('config.php');
+
+    // Escapa os dados para evitar problemas com aspas e SQL Injection
+    $nome = mysqli_real_escape_string($conexao, $_POST['nome']);
+    $email = mysqli_real_escape_string($conexao, $_POST['email']);
+    $telefone = mysqli_real_escape_string($conexao, $_POST['telefone']);
+    $sexo = mysqli_real_escape_string($conexao, $_POST['genero']);
+    $data_de_nasc = mysqli_real_escape_string($conexao, $_POST['data_nascimento']);
+    $cidade = mysqli_real_escape_string($conexao, $_POST['cidade']);
+    $estado = mysqli_real_escape_string($conexao, $_POST['estado']);
+    $endereco = mysqli_real_escape_string($conexao, $_POST['endereco']);
+
+    // Verifica se o email já existe
+    $verifica = mysqli_query($conexao, "SELECT * FROM usuario WHERE email = '$email'");
+    if(mysqli_num_rows($verifica) > 0) {
+        $mensagem = "Este email já está cadastrado!";
+    } else {
+        // Insere os dados no banco
+        $sql = "INSERT INTO usuario
+        (nome,email,telefone,sexo,data_de_nasc,cidade,estado,endereco)
+        VALUES
+        ('$nome','$email','$telefone','$sexo','$data_de_nasc','$cidade','$estado','$endereco')";
+
+        if(mysqli_query($conexao, $sql)) {
+            $mensagem = "Usuário cadastrado com sucesso!";
+        } else {
+            $mensagem = "Erro ao cadastrar: " . mysqli_error($conexao);
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -78,7 +115,14 @@
 </head>
 <body>
     <div class="box">
-        <form action="">
+        <!-- Mensagem de feedback -->
+        <?php if(!empty($mensagem)) { ?>
+            <p style="color: yellow; text-align: center; font-weight: bold;">
+                <?php echo $mensagem; ?>
+            </p>
+        <?php } ?>
+
+        <form action="formulario.php" method="post">
             <fieldset>
                 <legend><b>Formulário de Clientes</b></legend>
                 <br>
